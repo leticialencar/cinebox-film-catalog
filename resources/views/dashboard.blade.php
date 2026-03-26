@@ -41,6 +41,12 @@
                                 + Adicionar à coleção
                             </button>
                         </form>
+
+                        <a href="{{ route('movies.showFromApi', $featured['id']) }}"
+                        class="bg-white/10 hover:bg-white/20 px-6 py-3 rounded-xl text-lg transition">
+                            Mais detalhes
+                        </a>
+
                     </div>
                 </div>
             </div>
@@ -120,11 +126,9 @@
                 @foreach($popular as $movie)
                     <div class="min-w-[160px] md:min-w-[180px] group relative rounded-xl overflow-hidden hover:z-10">
 
-                        {{-- IMAGEM --}}
                         <img src="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] ?? '' }}"
                             class="w-full h-full object-cover transition duration-300 group-hover:scale-105 group-hover:brightness-75">
 
-                        {{-- OVERLAY --}}
                         <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition duration-300 
                                     flex flex-col justify-end p-3 
                                     bg-gradient-to-t from-black via-black/70 to-transparent">
@@ -141,9 +145,18 @@
                                 <input type="hidden" name="description" value="{{ $movie['overview'] }}">
                                 <input type="hidden" name="poster" value="https://image.tmdb.org/t/p/w500{{ $movie['poster_path'] ?? '' }}">
 
-                                <button class="w-full bg-purple-600 hover:bg-purple-700 py-1 rounded text-xs">
-                                    + Adicionar
-                                </button>
+                                <div class="flex flex-col gap-2">
+
+                                    <button class="w-full bg-purple-600 hover:bg-purple-700 py-1 rounded text-xs transition">
+                                        + Adicionar
+                                    </button>
+
+                                    <a href="{{ route('movies.showFromApi', $movie['id']) }}"
+                                    class="w-full block text-center bg-white/10 hover:bg-white/20 py-1 rounded text-xs transition">
+                                        Detalhes
+                                    </a>
+
+                                </div>
                             </form>
                         </div>
 

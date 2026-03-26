@@ -72,4 +72,99 @@ class MovieController extends Controller
             ->route('movies.index')
             ->with('success', 'Filme adicionado com sucesso!');
     }
+
+    public function showFromApi($id)
+    {
+        $apiKey = config('services.tmdb.key');
+
+        $movie = Http::get("https://api.themoviedb.org/3/movie/{$id}", [
+            'api_key' => $apiKey,
+            'language' => 'pt-BR'
+        ])->json();
+
+        if (!$movie) {
+            abort(404, 'Filme não encontrado');
+        }
+
+        $movie['videos'] = Http::get("https://api.themoviedb.org/3/movie/{$id}/videos", [
+            'api_key' => $apiKey,
+            'language' => 'pt-BR'
+        ])->json('results') ?? [];
+
+        $movie['credits'] = Http::get("https://api.themoviedb.org/3/movie/{$id}/credits", [
+            'api_key' => $apiKey,
+            'language' => 'pt-BR'
+        ])->json() ?? ['cast' => [], 'crew' => []];
+
+        $movie['backdrop'] = !empty($movie['backdrop_path'])
+            ? "https://image.tmdb.org/t/p/original{$movie['backdrop_path']}"
+            : null;
+
+        $movie['poster'] = !empty($movie['poster_path'])
+            ? "https://image.tmdb.org/t/p/w500{$movie['poster_path']}"
+            : null;
+
+        $movie['rating'] = isset($movie['vote_average'])
+            ? number_format($movie['vote_average'], 1)
+            : '0.0';
+
+        $movie['release'] = $movie['release_date'] ?? null;
+
+        $movie['director'] = collect($movie['credits']['crew'])
+            ->firstWhere('job', 'Director')['name'] ?? '—';
+
+        $movie['writer'] = collect($movie['credits']['crew'])
+            ->firstWhere('job', 'Writer')['name']
+            ?? collect($movie['credits']['crew'])->firstWhere('job', 'Screenplay')['name']
+            ?? '—';
+
+        $movie['studios'] = collect($movie['production_companies'] ?? [])
+            ->pluck('name')
+            ->take(2)
+            ->implode(', ');
+
+        $cast = $movie['credits']['cast'] ?? [];
+
+        $title = $movie['title'] ?? '—';
+        $description = $movie['overview'] ?? '';
+        $poster = $movie['poster'];
+        $backdrop = $movie['backdrop'];
+        $rating = $movie['rating'];
+        $release = $movie['release'];
+        $director = $movie['director'];
+        $writer = $movie['writer'];
+        $studios = $movie['studios'];
+        $trailer = collect($movie['videos'])->firstWhere('type', 'Trailer')['key'] ?? null;
+
+        $runtime = $movie['runtime'] ?? null;
+        $hours = $runtime ? floor($runtime / 60) : null;
+        $minutes = $runtime ? $runtime % 60 : null;
+
+        $userRating = null;
+
+        $userId = Auth::id();
+        $userData = Movie::where('user_id', $userId)
+            ->where('tmdb_id', $id)
+            ->first();
+
+        return view('movies.show', compact(
+            'movie',
+            'cast',
+            'title',
+            'description',
+            'poster',
+            'backdrop',
+            'rating',
+            'release',
+            'director',
+            'writer',
+            'studios',
+            'trailer',
+            'hours',
+            'minutes',
+            'userRating',
+            'id',
+            'userData'
+        ));
+    }
 }

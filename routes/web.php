@@ -20,6 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/movies/store-from-api', [MovieController::class, 'storeFromApi'])
         ->name('movies.storeFromApi');
 
+    Route::get('/movies/tmdb/{id}', [MovieController::class, 'showFromApi'])
+        ->name('movies.showFromApi');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
