@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/movies/tmdb/{id}', [MovieController::class, 'showFromApi'])
         ->name('movies.showFromApi');
 
+    Route::patch('/movies/{movie}/favorite', [MovieController::class, 'toggleFavorite'])
+        ->name('movies.toggleFavorite');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

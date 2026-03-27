@@ -167,4 +167,29 @@ class MovieController extends Controller
             'userData'
         ));
     }
+
+    public function destroy(Movie $movie)
+    {
+        if ($movie->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $movie->delete();
+
+        return redirect()
+            ->route('movies.index')
+            ->with('success', 'Filme removido com sucesso!');
+    }
+
+    public function toggleFavorite(Movie $movie)
+    {
+        if ($movie->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $movie->is_favorite = !$movie->is_favorite;
+        $movie->save();
+
+        return back();
+    }
 }
