@@ -161,8 +161,8 @@
 
                                 <button
                                     class="w-full py-3 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg
-                                    {{ $userData->is_favorite 
-                                        ? 'bg-red-600 hover:bg-red-700' 
+                                    {{ $userData->is_favorite
+                                        ? 'bg-red-600 hover:bg-red-700'
                                         : 'bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02]' }}"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -196,25 +196,27 @@
                                 Editar detalhes
                             </button>
 
-                            <form method="POST" action="{{ route('movies.destroy', $userData->id) }}">
+                            {{-- Form separado, sem botão próprio --}}
+                            <form method="POST" action="{{ route('movies.destroy', $userData->id) }}" id="deleteMovieForm">
                                 @csrf
                                 @method('DELETE')
-
-                                <button
-                                    class="w-full py-3 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 font-semibold"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                        width="16"
-                                        height="16"
-                                        fill="currentColor"
-                                        class="bi bi-trash3-fill"
-                                        viewBox="0 0 16 16"
-                                    >
-                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
-                                    </svg>
-                                    Remover da coleção
-                                </button>
                             </form>
+
+                            <button
+                                id="openDeleteModal"
+                                class="w-full py-3 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 font-semibold"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-trash3-fill"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                </svg>
+                                Remover da coleção
+                            </button>
 
                         @else
 
@@ -250,7 +252,7 @@
                     @if ($userData && !empty($userData->user_rating))
 
                         @php
-                            $starValue = $userData->user_rating / 2; // converte 1-10 pra 1-5
+                            $starValue = $userData->user_rating / 2;
                         @endphp
 
                         <div class="flex gap-1 text-2xl">
@@ -281,14 +283,11 @@
                 </div>
         </div>
 
-        <div id="ratingModal" class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-            <div class="bg-[#0b0b1f] rounded-2xl p-8 max-w-lg w-full relative">
+        {{-- Modal de avaliação --}}
+        <div id="ratingModal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-[#0b0b1f] border border-white/10 rounded-2xl p-8 max-w-lg w-full mx-4 relative shadow-2xl">
 
-                <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                    ✕
-                </button>
-
-                <h2 class="text-2xl font-semibold mb-4 text-purple-400">Sua Avaliação</h2>
+                <h2 class="text-2xl font-semibold mb-2 text-purple-400">Sua Avaliação</h2>
                 <p class="text-gray-400 text-sm mb-6">
                     Compartilhe sua experiência cinematográfica com a comunidade.
                 </p>
@@ -334,11 +333,21 @@
                     </div>
 
                     <div class="flex justify-end gap-4">
-
+                        <button
+                            type="button"
+                            id="closeModal"
+                            class="px-6 py-3 rounded-2xl border border-purple-500 text-purple-400 hover:bg-purple-600/20 transition-all duration-200 font-semibold"
+                        >
+                            Cancelar
+                        </button>
                         <button
                             type="submit"
-                            class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02] transition-all duration-200 font-semibold"
+                            class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02] transition-all duration-200 font-semibold flex items-center gap-2"
                         >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                                <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z"/>
+                                <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z"/>
+                            </svg>
                             Salvar
                         </button>
                     </div>
@@ -347,11 +356,48 @@
             </div>
         </div>
 
+        {{-- Modal de confirmação de remoção --}}
+        <div id="deleteModal" class="fixed inset-0 z-50 bg-black/60 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-[#0b0b1f] border border-white/10 rounded-2xl p-8 max-w-md w-full mx-4 relative shadow-2xl">
+
+                <h2 class="text-2xl font-semibold mb-2 text-purple-400">Remover da coleção?</h2>
+                <p class="text-gray-400 text-sm mb-6">
+                    Essa ação não pode ser desfeita.
+                </p>
+
+                <p class="text-gray-300 text-sm leading-relaxed mb-8">
+                    Se você remover <strong class="text-white">{{ $movie['title'] ?? 'este filme' }}</strong> da sua coleção,
+                    todos os dados associados serão apagados permanentemente, incluindo sua
+                    <span class="text-purple-400">avaliação</span> e
+                    <span class="text-purple-400">comentários</span>.
+                </p>
+
+                <div class="flex justify-end gap-4">
+                    <button
+                        id="cancelDeleteModal"
+                        class="px-6 py-3 rounded-2xl border border-purple-500 text-purple-400 hover:bg-purple-600/20 transition-all duration-200 font-semibold"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        id="confirmDelete"
+                        class="px-6 py-3 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-200 font-semibold flex items-center gap-2"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                        </svg>
+                        Sim, remover
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
         @vite([
             'resources/css/app.css',
             'resources/js/app.js',
-            
-            'resources/js/modal.js'
+            'resources/js/modal.js',
+            'resources/js/deleteModal.js'
         ])
 
     </div>
