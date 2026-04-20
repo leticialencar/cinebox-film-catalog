@@ -181,6 +181,50 @@ class MovieController extends Controller
             ->with('success', 'Filme removido com sucesso!');
     }
 
+    public function edit(Movie $movie)
+    {
+        if ($movie->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return view('movies.edit', compact('movie'));
+    }
+
+    public function saveOrUpdate(Request $request)
+    {
+        $data = $request->validate([
+            'tmdb_id'     => 'required',
+            'title'       => 'required|string|max:255',
+            'poster'      => 'nullable|string',
+            'user_rating' => 'nullable|integer|min:0|max:10',
+            'review'      => 'nullable|string|max:2000',
+        ]);
+
+        $userId = Auth::id();
+
+        $movie = Movie::where('user_id', $userId)
+            ->where('tmdb_id', $data['tmdb_id'])
+            ->first();
+
+        if ($movie) {
+            $movie->update([
+                'user_rating' => $data['user_rating'],
+                'review'      => $data['review'],
+            ]);
+        } else {
+            Movie::create([
+                'user_id'     => $userId,
+                'tmdb_id'     => $data['tmdb_id'],
+                'title'       => $data['title'],
+                'poster'      => $data['poster'],
+                'user_rating' => $data['user_rating'],
+                'review'      => $data['review'],
+            ]);
+        }
+
+        return back()->with('success', 'Avaliação salva com sucesso!');
+    }
+    
     public function toggleFavorite(Movie $movie)
     {
         if ($movie->user_id !== Auth::id()) {
@@ -192,4 +236,5 @@ class MovieController extends Controller
 
         return back();
     }
+
 }

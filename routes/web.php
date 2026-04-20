@@ -17,6 +17,9 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('movies', MovieController::class);
 
+    Route::post('/movies/save-or-update', [MovieController::class, 'saveOrUpdate'])
+        ->name('movies.saveOrUpdate');
+
     Route::post('/movies/store-from-api', [MovieController::class, 'storeFromApi'])
         ->name('movies.storeFromApi');
 

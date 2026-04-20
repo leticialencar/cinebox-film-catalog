@@ -16,10 +16,17 @@
         @endphp
 
         <div class="relative w-full h-[75vh] overflow-hidden">
-
             <img
                 src="{{ $movie['backdrop'] ?? '' }}"
-                class="absolute inset-0 w-full h-full object-cover scale-110 blur-sm opacity-40">
+                class="absolute inset-0 w-full h-full object-cover scale-110 blur-sm opacity-40"
+            >
+
+            @if(session('success'))
+                <div id="alert"
+                    class="fixed top-6 right-6 z-50 p-4 rounded-lg bg-green-600 text-white text-sm font-semibold shadow-lg transform translate-x-20 opacity-0 transition-all duration-500">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             <div class="absolute inset-0 bg-gradient-to-b from-[#0b0b1f]/20 via-[#0b0b1f]/80 to-[#0b0b1f]"></div>
 
@@ -29,7 +36,8 @@
                     <div class="w-56 md:w-72 rounded-2xl overflow-hidden shadow-2xl border border-white/10 translate-y-10">
                         <img
                             src="{{ $movie['poster'] ?? '' }}"
-                            class="w-full h-full object-cover">
+                            class="w-full h-full object-cover"
+                        >
                     </div>
 
                     <div class="max-w-2xl">
@@ -100,7 +108,6 @@
                         @endphp
 
                         <div class="min-w-[120px] text-center">
-
                             <img
                                 src="{{ $profile }}"
                                 class="w-24 h-24 mx-auto mb-3 rounded-full object-cover border border-white/10"
@@ -113,7 +120,6 @@
                             <p class="text-xs text-gray-400">
                                 {{ $character }}
                             </p>
-
                         </div>
 
                     @empty
@@ -147,48 +153,64 @@
 
                     <div class="space-y-4">
 
-                    @if ($userData)
+                        @if ($userData)
 
-                        <form method="POST" action="{{ route('movies.toggleFavorite', $userData->id) }}">
-                        @csrf
-                        @method('PATCH')
+                            <form method="POST" action="{{ route('movies.toggleFavorite', $userData->id) }}">
+                                @csrf
+                                @method('PATCH')
 
-                        <button
-                            class="w-full py-3 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg
-                            {{ $userData->is_favorite 
-                                ? 'bg-red-600 hover:bg-red-700' 
-                                : 'bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02]' }}">
+                                <button
+                                    class="w-full py-3 rounded-2xl transition-all duration-200 flex items-center justify-center gap-2 font-semibold shadow-lg
+                                    {{ $userData->is_favorite 
+                                        ? 'bg-red-600 hover:bg-red-700' 
+                                        : 'bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02]' }}"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        viewBox="0 0 16 16"
+                                        fill="{{ $userData->is_favorite ? 'white' : 'currentColor' }}"
+                                    >
+                                        <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"/>
+                                    </svg>
 
-                            <svg xmlns="http://www.w3.org/2000/svg"
-                                width="16"
-                                height="16"
-                                viewBox="0 0 16 16"
-                                fill="{{ $userData->is_favorite ? 'white' : 'currentColor' }}">
-                                <path d="M4 1c2.21 0 4 1.755 4 3.92C8 2.755 9.79 1 12 1s4 1.755 4 3.92c0 3.263-3.234 4.414-7.608 9.608a.513.513 0 0 1-.784 0C3.234 9.334 0 8.183 0 4.92 0 2.755 1.79 1 4 1"/>
-                            </svg>
+                                    {{ $userData->is_favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}
+                                </button>
+                            </form>
 
-                            {{ $userData->is_favorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}
-
-                        </button>
-                    </form>
-
-                        <button
-                            class="w-full py-3 rounded-2xl border border-purple-500 text-purple-400 hover:bg-purple-600/20 transition-all duration-200 flex items-center justify-center gap-2 font-semibold">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                            </svg>
-                            Editar detalhes
-                        </button>
+                            <button
+                                id="openModal"
+                                class="w-full py-3 rounded-2xl border border-purple-500 text-purple-400 hover:bg-purple-600/20 transition-all duration-200 flex items-center justify-center gap-2 font-semibold"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-pencil-square"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                    <path fill-rule="evenodd"
+                                        d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                                </svg>
+                                Editar detalhes
+                            </button>
 
                             <form method="POST" action="{{ route('movies.destroy', $userData->id) }}">
                                 @csrf
                                 @method('DELETE')
 
                                 <button
-                                    class="w-full py-3 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 font-semibold">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3-fill" viewBox="0 0 16 16">
-                                    <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
+                                    class="w-full py-3 rounded-2xl bg-red-500/10 text-red-400 hover:bg-red-500/20 hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-2 font-semibold"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                        width="16"
+                                        height="16"
+                                        fill="currentColor"
+                                        class="bi bi-trash3-fill"
+                                        viewBox="0 0 16 16"
+                                    >
+                                        <path d="M11 1.5v1h3.5a.5.5 0 0 1 0 1h-.538l-.853 10.66A2 2 0 0 1 11.115 16h-6.23a2 2 0 0 1-1.994-1.84L2.038 3.5H1.5a.5.5 0 0 1 0-1H5v-1A1.5 1.5 0 0 1 6.5 0h3A1.5 1.5 0 0 1 11 1.5m-5 0v1h4v-1a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5M4.5 5.029l.5 8.5a.5.5 0 1 0 .998-.06l-.5-8.5a.5.5 0 1 0-.998.06m6.53-.528a.5.5 0 0 0-.528.47l-.5 8.5a.5.5 0 0 0 .998.058l.5-8.5a.5.5 0 0 0-.47-.528M8 4.5a.5.5 0 0 0-.5.5v8.5a.5.5 0 0 0 1 0V5a.5.5 0 0 0-.5-.5"/>
                                     </svg>
                                     Remover da coleção
                                 </button>
@@ -223,50 +245,114 @@
                 {{-- rating --}}
                 <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
 
-                    <p class="text-gray-400 text-sm mb-2">
-                        Sua avaliação
-                    </p>
+                    <p class="text-gray-400 text-sm mb-2">Sua avaliação</p>
 
-                    @if ($userData && !empty($userData->rating))
+                    @if ($userData && !empty($userData->user_rating))
 
                         @php
-                            $stars = round($userData->rating / 2);
+                            $starValue = $userData->user_rating / 2; // converte 1-10 pra 1-5
                         @endphp
 
-                        <div class="text-yellow-400 text-xl">
+                        <div class="flex gap-1 text-2xl">
                             @for ($i = 1; $i <= 5; $i++)
-                                {{ $i <= $stars ? '★' : '☆' }}
+                                @if ($starValue >= $i)
+                                    <span style="color: #9b5de5;">★</span>
+                                @elseif ($starValue >= $i - 0.5)
+                                    <span class="relative inline-block" style="color: #4b4b6b;">
+                                        ★
+                                        <span class="absolute inset-0 overflow-hidden w-1/2" style="color: #9b5de5;">★</span>
+                                    </span>
+                                @else
+                                    <span style="color: #4b4b6b;">★</span>
+                                @endif
                             @endfor
                         </div>
 
                         <p class="text-sm text-gray-400 mt-2">
-                            {{ $userData->rating }}/10
+                            {{ number_format($starValue, 1) }}/5
                         </p>
 
                     @else
 
-                        <p class="text-gray-500 text-sm">
-                            Ainda não avaliado
-                        </p>
+                        <p class="text-gray-500 text-sm">Ainda não avaliado</p>
 
                     @endif
 
                 </div>
-
-            </div>
-
         </div>
 
-        <style>
-            .no-scrollbar::-webkit-scrollbar {
-                display: none;
-            }
+        <div id="ratingModal" class="fixed inset-0 z-50 bg-black/70 flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+            <div class="bg-[#0b0b1f] rounded-2xl p-8 max-w-lg w-full relative">
 
-            .no-scrollbar {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
-        </style>
+                <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    ✕
+                </button>
+
+                <h2 class="text-2xl font-semibold mb-4 text-purple-400">Sua Avaliação</h2>
+                <p class="text-gray-400 text-sm mb-6">
+                    Compartilhe sua experiência cinematográfica com a comunidade.
+                </p>
+
+                <form method="POST" action="{{ route('movies.saveOrUpdate') }}">
+                    @csrf
+
+                    <input type="hidden" name="tmdb_id" value="{{ $movie['id'] }}">
+                    <input type="hidden" name="title" value="{{ $movie['title'] }}">
+                    <input type="hidden" name="poster" value="{{ $movie['poster'] }}">
+
+                    <div class="mb-6">
+                        <label class="block text-sm text-gray-400 mb-2">Sua nota</label>
+
+                        <div id="starContainer" class="flex gap-1 text-4xl">
+                            @for ($i = 1; $i <= 5; $i++)
+                                <span class="star relative cursor-pointer" data-value="{{ $i }}">
+                                    <span class="half absolute top-0 left-0 overflow-hidden text-purple-500 w-0">★</span>
+                                    <span class="full text-gray-400">★</span>
+                                </span>
+                            @endfor
+                        </div>
+
+                        <input
+                            type="hidden"
+                            name="user_rating"
+                            id="ratingInput"
+                            value="{{ $userData->user_rating ?? 0 }}"
+                        >
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm text-gray-400 mb-2">Comentário</label>
+
+                        <textarea
+                            id="reviewInput"
+                            name="review"
+                            maxlength="2000"
+                            rows="5"
+                            class="w-full bg-white/5 border border-white/10 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-purple-600 transition resize-none"
+                            placeholder="O que você achou do filme?"
+                        >{{ $userData->review ?? '' }}</textarea>
+                    </div>
+
+                    <div class="flex justify-end gap-4">
+
+                        <button
+                            type="submit"
+                            class="px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-500 hover:scale-[1.02] transition-all duration-200 font-semibold"
+                        >
+                            Salvar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        @vite([
+            'resources/css/app.css',
+            'resources/js/app.js',
+            
+            'resources/js/modal.js'
+        ])
 
     </div>
 </x-app-layout>

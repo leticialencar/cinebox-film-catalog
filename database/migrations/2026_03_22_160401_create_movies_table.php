@@ -20,7 +20,11 @@ return new class extends Migration
             $table->integer('release_year')->nullable();
             $table->text('description')->nullable();
             $table->string('poster')->nullable();
-            $table->decimal('rating', 3, 1)->nullable();
+            
+            $table->decimal('tmdb_rating', 3, 1)->nullable();
+            $table->unsignedTinyInteger('user_rating')->nullable();
+            $table->text('review')->nullable();
+            
             $table->boolean('is_favorite')->default(false);
             $table->timestamps();
         });

@@ -11,7 +11,9 @@ class Movie extends Model
         'genre',
         'release_year',
         'description',
-        'rating',
+        'tmdb_rating', 
+        'user_rating', 
+        'review',    
         'is_favorite',
         'user_id', 
         'tmdb_id', 
@@ -21,6 +23,7 @@ class Movie extends Model
     protected $casts = [
         'is_favorite' => 'boolean',
         'release_year' => 'integer',
-        'rating' => 'decimal:1',
+        'tmdb_rating' => 'decimal:1',
+        'user_rating' => 'integer',
     ];
 }
