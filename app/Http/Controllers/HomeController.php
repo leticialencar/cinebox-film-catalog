@@ -12,7 +12,7 @@ class HomeController extends Controller
         $movies = Movie::latest()->get();
 
         $response = Http::get('https://api.themoviedb.org/3/movie/popular', [
-            'api_key' => env('TMDB_API_KEY'),
+            'api_key' => config('services.tmdb.key'),
             'language' => 'pt-BR'
         ]);
 
