@@ -23,4 +23,18 @@ class HomeController extends Controller
 
         return view('dashboard', compact('movies', 'popular'));
     }
+
+    public function welcome()
+    {
+        $response = Http::get('https://api.themoviedb.org/3/movie/popular', [
+            'api_key' => config('services.tmdb.key'),
+            'language' => 'pt-BR'
+        ]);
+
+        $popular = $response->successful()
+            ? $response->json()['results']
+            : [];
+
+        return view('welcome', compact('popular'));
+    }
 }
