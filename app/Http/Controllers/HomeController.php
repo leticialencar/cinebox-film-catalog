@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Movie;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $movies = Movie::latest()->get();
+        $movies = Movie::where('user_id', Auth::id())->latest()->get();
 
         $response = Http::get('https://api.themoviedb.org/3/movie/popular', [
             'api_key' => config('services.tmdb.key'),
