@@ -247,4 +247,30 @@ class MovieController extends Controller
         return back();
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Http::get('https://api.themoviedb.org/3/search/movie', [
+            'api_key'  => config('services.tmdb.key'),
+            'language' => 'pt-BR',
+            'query'    => $query,
+        ])->json()['results'] ?? [];
+
+        return response()->json(
+            collect($results)->take(6)->map(fn($m) => [
+                'id'          => $m['id'],
+                'title'       => $m['title'],
+                'year'        => substr($m['release_date'] ?? '', 0, 4),
+                'poster'      => $m['poster_path']
+                    ? 'https://image.tmdb.org/t/p/w92' . $m['poster_path']
+                    : null,
+            ])
+        );
+    }
+
 }

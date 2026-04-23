@@ -15,7 +15,7 @@
             $minutes = $runtime ? $runtime % 60 : null;
         @endphp
 
-        <div class="relative w-full h-[75vh] overflow-hidden">
+        <div class="relative w-full h-[75vh] overflow-hidden hidden md:block">
             <img
                 src="{{ $movie['backdrop'] ?? '' }}"
                 class="absolute inset-0 w-full h-full object-cover scale-110 blur-sm opacity-40"
@@ -31,30 +31,56 @@
             <div class="absolute inset-0 bg-gradient-to-b from-[#0b0b1f]/20 via-[#0b0b1f]/80 to-[#0b0b1f]"></div>
 
             <div class="relative z-10 max-w-7xl mx-auto px-6 h-full flex items-end pb-16">
-                <div class="flex flex-col md:flex-row gap-6 md:gap-10 items-center md:items-end">
-
-                    <div class="w-36 md:w-72 rounded-2xl overflow-hidden shadow-2xl border border-white/10 md:translate-y-10 flex-shrink-0">
-                        <img
-                            src="{{ $movie['poster'] ?? '' }}"
-                            class="w-full h-full object-cover"
-                        >
+                <div class="flex flex-row gap-10 items-end">
+                    <div class="w-72 rounded-2xl overflow-hidden shadow-2xl border border-white/10 translate-y-10 flex-shrink-0">
+                        <img src="{{ $movie['poster'] ?? '' }}" class="w-full h-full object-cover">
                     </div>
-
-                    <div class="max-w-2xl text-center md:text-left">
-                        <h1 class="text-4xl md:text-6xl font-bold mb-4">
-                            {{ $movie['title'] ?? 'Sem título' }}
-                        </h1>
-
-                        <div class="flex items-center justify-center md:justify-start gap-4 text-sm text-gray-300 mb-4">
+                    <div class="max-w-2xl text-left">
+                        <h1 class="text-6xl font-bold mb-4">{{ $movie['title'] ?? 'Sem título' }}</h1>
+                        <div class="flex items-center gap-4 text-sm text-gray-300 mb-4">
                             <span>{{ $ratingFixed }}/10</span>
                             <span>{{ $releaseYear ? substr($releaseYear, 0, 4) : '—' }}</span>
-
                             @if (!empty($runtime))
                                 <span>{{ $hours }}h {{ $minutes }}min</span>
                             @endif
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
+        {{-- mobile --}}
+        <div class="md:hidden relative w-full overflow-hidden">
+        @if(session('success'))
+            <div id="alert-mobile"  {{-- ← trocar para alert-mobile --}}
+                class="fixed top-6 right-6 z-50 p-4 rounded-lg bg-green-600 text-white text-sm font-semibold shadow-lg transform translate-x-20 opacity-0 transition-all duration-500">
+                {{ session('success') }}
+            </div>
+        @endif
+
+            <div class="absolute inset-0 h-56 overflow-hidden">
+                <img
+                    src="{{ $movie['backdrop'] ?? '' }}"
+                    class="w-full h-full object-cover blur-sm opacity-30 scale-110"
+                >
+                <div class="absolute inset-0 bg-gradient-to-b from-[#0b0b1f]/30 to-[#0b0b1f]"></div>
+            </div>
+
+            <div class="relative z-10 flex flex-col items-center pt-10 pb-6 px-6">
+                <div class="w-40 rounded-2xl overflow-hidden shadow-2xl border border-white/10 mb-5">
+                    <img src="{{ $movie['poster'] ?? '' }}" class="w-full h-full object-cover">
+                </div>
+
+                <h1 class="text-2xl font-bold text-center mb-3 leading-tight">
+                    {{ $movie['title'] ?? 'Sem título' }}
+                </h1>
+
+                <div class="flex items-center justify-center gap-4 text-sm text-gray-300">
+                    <span>{{ $ratingFixed }}/10</span>
+                    <span>{{ $releaseYear ? substr($releaseYear, 0, 4) : '—' }}</span>
+                    @if (!empty($runtime))
+                        <span>{{ $hours }}h {{ $minutes }}min</span>
+                    @endif
                 </div>
             </div>
         </div>

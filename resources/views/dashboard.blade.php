@@ -51,7 +51,6 @@
             </div>
         @endif
 
-        {{-- Stats cards --}}
         <div class="px-6 md:px-10 mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
 
             <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 border border-white/10">
