@@ -8,7 +8,7 @@
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet"/>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#0b0b1f] text-white font-sans antialiased">
+<body x-data="{ openVideo: false }" class="bg-[#0b0b1f] text-white font-sans antialiased">
 
     <nav class="flex items-center justify-between px-4 md:px-10 py-4 md:py-5 border-b border-white/5">
         <a href="/">
@@ -76,11 +76,16 @@
                     class="w-full sm:w-auto text-center inline-block px-8 py-4 rounded-xl bg-[#8042e8] hover:bg-[#8042e8]/90 text-white font-bold text-base transition-all hover:scale-[1.02] relative">
                         Criar conta grátis
                     </a>
-                    <a href="{{ route('login') }}"
+                    <a href="#" 
+                    @click.prevent="openVideo = true"
                     class="w-full sm:w-auto text-center px-7 py-3.5 rounded-xl border border-white/15 text-gray-300 font-medium text-base hover:border-white/30 transition flex items-center justify-center gap-2">
+
                         <span class="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center">
-                            <svg width="8" height="8" viewBox="0 0 8 8" fill="white"><path d="M2 1l5 3-5 3z"/></svg>
+                            <svg width="8" height="8" viewBox="0 0 8 8" fill="white">
+                                <path d="M2 1l5 3-5 3z"/>
+                            </svg>
                         </span>
+
                         Ver como funciona
                     </a>
                 @endauth
@@ -215,6 +220,30 @@
             </a>
         @endauth
     </section>
+
+    <div x-show="openVideo"
+        class="fixed inset-0 bg-black/80 flex items-center justify-center z-50"
+        x-transition
+        @click.self="openVideo = false">
+
+        <div class="w-full max-w-4xl aspect-video bg-black rounded-xl overflow-hidden relative border border-white/10">
+
+            <button @click="openVideo = false; $refs.video.src = $refs.video.src"
+                    class="absolute top-3 right-3 text-white bg-black/60 rounded-full w-8 h-8 flex items-center justify-center z-10">
+                ✕
+            </button>
+
+            <iframe
+                x-ref="video"
+                class="w-full h-full"
+                src="https://player.vimeo.com/video/1185974496?autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0"
+                frameborder="0"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+
+        </div>
+    </div>
 
     <x-footer />
 
