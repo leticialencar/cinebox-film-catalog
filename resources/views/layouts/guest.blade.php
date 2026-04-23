@@ -32,5 +32,7 @@
 
         </div>
 
+        <x-footer-minimal />
+
     </body>
 </html>

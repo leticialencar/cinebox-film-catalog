@@ -199,7 +199,6 @@
 
     </section>
 
-    {{-- CTA final --}}
     <section class="px-10 py-24 text-center relative overflow-hidden">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-48 bg-purple-600/10 rounded-full blur-3xl pointer-events-none"></div>
         <h2 class="text-4xl font-extrabold tracking-tight mb-4 relative">Pronto para começar?</h2>
