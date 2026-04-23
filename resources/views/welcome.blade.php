@@ -10,7 +10,7 @@
 </head>
 <body class="bg-[#0b0b1f] text-white font-sans antialiased">
 
-    <nav class="flex items-center justify-between px-10 py-5 border-b border-white/5">
+    <nav class="flex items-center justify-between px-4 md:px-10 py-4 md:py-5 border-b border-white/5">
         <a href="/">
             <img src="https://i.imgur.com/XPuoV4A.png"
             class="h-14 w-auto rounded-xl"
@@ -19,17 +19,17 @@
         <div class="flex items-center gap-3">
             @auth
                 <a href="{{ url('/dashboard') }}"
-                   class="px-4 py-2 rounded-lg border border-white/15 text-gray-300 text-sm font-medium hover:border-white/30 transition">
+                class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/15 text-gray-300 text-xs md:text-sm font-medium hover:border-white/30 transition">
                     Minha coleção
                 </a>
             @else
                 <a href="{{ route('login') }}"
-                   class="px-4 py-2 rounded-lg border border-white/15 text-gray-300 text-sm font-medium hover:border-white/30 transition">
+                class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/15 text-gray-300 text-xs md:text-sm font-medium hover:border-white/30 transition">
                     Entrar
                 </a>
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}"
-                       class="px-4 py-2 rounded-lg bg-[#8042e8] hover:bg-[#8042e8]/90 text-white text-sm font-semibold transition">
+                    class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-[#8042e8] hover:bg-[#8042e8]/90 text-white text-xs md:text-sm font-semibold transition">
                         Criar conta
                     </a>
                 @endif
@@ -50,22 +50,22 @@
 
         <div class="absolute inset-0 bg-gradient-to-r from-[#0b0b1f] via-[#0b0b1f]/90 to-transparent"></div>
 
-        <div class="relative z-10 px-10 md:px-16 py-20 max-w-2xl">
+        <div class="relative z-10 px-5 md:px-16 py-12 md:py-20 max-w-2xl">
             <div class="inline-flex items-center gap-2 bg-purple-500/10 border border-purple-500/25 text-purple-400 text-xs font-bold px-4 py-1.5 rounded-full mb-8 tracking-widest uppercase">
                 <span class="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                 Avaliação de filmes
             </div>
 
-            <h1 class="text-5xl md:text-6xl font-extrabold leading-[1.08] tracking-tight mb-6">
+            <h1 class="text-3xl md:text-6xl font-extrabold leading-[1.08] tracking-tight mb-6">
                 Registre cada<br>filme que você<br><span class="text-[#8042e8]">já assistiu.</span>
             </h1>
 
-            <p class="text-gray-400 text-lg leading-relaxed mb-10 max-w-md">
+            <p class="text-gray-400 text-base md:text-lg leading-relaxed mb-8 md:mb-10 max-w-md">
                 Crie sua coleção pessoal, avalie títulos, escreva resenhas
                 e descubra o que assistir a seguir.
             </p>
 
-            <div class="flex items-center gap-4 mb-10">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 mb-8 md:mb-10">
                 @auth
                     <a href="{{ url('/dashboard') }}"
                        class="inline-block px-8 py-4 rounded-xl bg-[#8042e8] hover:bg-[#8042e8]/90 text-white font-bold text-base transition-all hover:scale-[1.02] relative">
@@ -73,11 +73,11 @@
                     </a>
                 @else
                     <a href="{{ route('register') }}"
-                       class="inline-block px-8 py-4 rounded-xl bg-[#8042e8] hover:bg-[#8042e8]/90 text-white font-bold text-base transition-all hover:scale-[1.02] relative">
+                    class="w-full sm:w-auto text-center inline-block px-8 py-4 rounded-xl bg-[#8042e8] hover:bg-[#8042e8]/90 text-white font-bold text-base transition-all hover:scale-[1.02] relative">
                         Criar conta grátis
                     </a>
                     <a href="{{ route('login') }}"
-                       class="px-7 py-3.5 rounded-xl border border-white/15 text-gray-300 font-medium text-base hover:border-white/30 transition flex items-center gap-2">
+                    class="w-full sm:w-auto text-center px-7 py-3.5 rounded-xl border border-white/15 text-gray-300 font-medium text-base hover:border-white/30 transition flex items-center justify-center gap-2">
                         <span class="w-5 h-5 bg-white/10 rounded-full flex items-center justify-center">
                             <svg width="8" height="8" viewBox="0 0 8 8" fill="white"><path d="M2 1l5 3-5 3z"/></svg>
                         </span>

@@ -7,6 +7,7 @@ import './modal';
 import './password-check';
 import './collection';
 import './dashboard';
+import './sort';
 
 window.Alpine = Alpine;
 
