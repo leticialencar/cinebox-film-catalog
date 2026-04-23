@@ -28,6 +28,16 @@ class MovieController extends Controller
             ? ($popularResponse->json()['results'] ?? [])
             : [];
 
+        $upcomingResponse = Http::get('https://api.themoviedb.org/3/movie/upcoming', [
+            'api_key' => $apiKey,
+            'language' => 'pt-BR',
+            'region'   => 'BR',
+        ]);
+
+        $upcoming = $upcomingResponse->successful()
+            ? ($upcomingResponse->json()['results'] ?? [])
+            : [];
+
         $topRatedResponse = Http::get('https://api.themoviedb.org/3/movie/top_rated', [
             'api_key' => $apiKey,
             'language' => 'pt-BR'
@@ -37,7 +47,7 @@ class MovieController extends Controller
             ? ($topRatedResponse->json()['results'] ?? [])
             : [];
 
-        return view('movies.index', compact('movies', 'popular', 'topRated'));
+        return view('movies.index', compact('movies', 'popular', 'upcoming', 'topRated'));
     }
 
     public function storeFromApi(Request $request)

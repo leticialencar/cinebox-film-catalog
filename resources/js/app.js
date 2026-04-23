@@ -6,6 +6,7 @@ import './alert';
 import './modal';
 import './password-check';
 import './collection';
+import './dashboard';
 
 window.Alpine = Alpine;
 
