@@ -44,6 +44,7 @@ return [
     'required' => 'O campo :attribute é obrigatório.',
     'string' => 'O campo :attribute deve ser um texto.',
     'unique' => 'Este :attribute já está em uso.',
+    'current_password' => 'A senha atual está incorreta.',
 
     /*
     |--------------------------------------------------------------------------

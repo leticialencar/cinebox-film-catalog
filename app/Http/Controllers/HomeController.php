@@ -10,17 +10,36 @@ class HomeController extends Controller
 {
     public function index()
     {
+        $apiKey = config('services.tmdb.key');
+
         $movies = Movie::where('user_id', Auth::id())->latest()->get();
 
-        $response = Http::get('https://api.themoviedb.org/3/movie/popular', [
-            'api_key' => config('services.tmdb.key'),
+        $popular = Http::get('https://api.themoviedb.org/3/movie/popular', [
+            'api_key'  => $apiKey,
             'language' => 'pt-BR'
-        ]);
+        ])->json()['results'] ?? [];
 
-        $popular = $response->successful()
-            ? $response->json()['results']
-            : [];
+        $upcoming = Http::get('https://api.themoviedb.org/3/movie/upcoming', [
+            'api_key'  => $apiKey,
+            'language' => 'pt-BR',
+            'region'   => 'BR',
+        ])->json()['results'] ?? [];
 
-        return view('dashboard', compact('movies', 'popular'));
+        $topRated = Http::get('https://api.themoviedb.org/3/movie/top_rated', [
+            'api_key'  => $apiKey,
+            'language' => 'pt-BR',
+        ])->json()['results'] ?? [];
+
+        return view('dashboard', compact('movies', 'popular', 'upcoming', 'topRated'));
+    }
+
+    public function welcome()
+    {
+        $popular = Http::get('https://api.themoviedb.org/3/movie/popular', [
+            'api_key'  => config('services.tmdb.key'),
+            'language' => 'pt-BR'
+        ])->json()['results'] ?? [];
+
+        return view('welcome', compact('popular'));
     }
 }

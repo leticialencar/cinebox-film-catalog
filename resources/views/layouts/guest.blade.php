@@ -14,23 +14,25 @@
     </head>
     <body class="font-sans antialiased bg-[#0b0b1f]">
 
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+        <div class="min-h-screen flex flex-col justify-center items-center px-6 sm:px-0">
 
             <div class="mb-8">
                 <a href="/" class="flex justify-center">
                     <img 
                         src="https://i.imgur.com/XPuoV4A.png"
                         alt="CineBox"
-                        class="w-56 sm:w-64 md:w-72 lg:w-80 h-auto rounded-xl"
+                        class="w-40 sm:w-64 md:w-72 lg:w-80 h-auto rounded-xl"
                     >
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md px-6 py-8 bg-white/5 border border-white/10 shadow-xl overflow-hidden sm:rounded-2xl">
+            <div class="w-full max-w-sm sm:max-w-md px-5 py-7 bg-white/5 border border-white/10 shadow-xl overflow-hidden rounded-2xl">
                 {{ $slot }}
             </div>
 
         </div>
+
+        <x-footer-minimal />
 
     </body>
 </html>

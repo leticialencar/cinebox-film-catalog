@@ -5,6 +5,9 @@ import './rating';
 import './alert';
 import './modal';
 import './password-check';
+import './collection';
+import './dashboard';
+import './sort';
 
 window.Alpine = Alpine;
 

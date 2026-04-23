@@ -28,6 +28,16 @@ class MovieController extends Controller
             ? ($popularResponse->json()['results'] ?? [])
             : [];
 
+        $upcomingResponse = Http::get('https://api.themoviedb.org/3/movie/upcoming', [
+            'api_key' => $apiKey,
+            'language' => 'pt-BR',
+            'region'   => 'BR',
+        ]);
+
+        $upcoming = $upcomingResponse->successful()
+            ? ($upcomingResponse->json()['results'] ?? [])
+            : [];
+
         $topRatedResponse = Http::get('https://api.themoviedb.org/3/movie/top_rated', [
             'api_key' => $apiKey,
             'language' => 'pt-BR'
@@ -37,7 +47,7 @@ class MovieController extends Controller
             ? ($topRatedResponse->json()['results'] ?? [])
             : [];
 
-        return view('movies.index', compact('movies', 'popular', 'topRated'));
+        return view('movies.index', compact('movies', 'popular', 'upcoming', 'topRated'));
     }
 
     public function storeFromApi(Request $request)
@@ -235,6 +245,32 @@ class MovieController extends Controller
         $movie->save();
 
         return back();
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json([]);
+        }
+
+        $results = Http::get('https://api.themoviedb.org/3/search/movie', [
+            'api_key'  => config('services.tmdb.key'),
+            'language' => 'pt-BR',
+            'query'    => $query,
+        ])->json()['results'] ?? [];
+
+        return response()->json(
+            collect($results)->take(6)->map(fn($m) => [
+                'id'          => $m['id'],
+                'title'       => $m['title'],
+                'year'        => substr($m['release_date'] ?? '', 0, 4),
+                'poster'      => $m['poster_path']
+                    ? 'https://image.tmdb.org/t/p/w92' . $m['poster_path']
+                    : null,
+            ])
+        );
     }
 
 }
