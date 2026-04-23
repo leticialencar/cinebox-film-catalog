@@ -4,12 +4,19 @@
         <div class="px-6 md:px-10 pt-12 pb-8">
             <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
 
-                <div>
-                    <h1 class="text-2xl font-bold">Minha Coleção</h1>
-                    <p class="text-gray-500 mt-1 text-sm">
-                        {{ $movies->count() }} {{ $movies->count() == 1 ? 'filme na sua coleção' : 'filmes na sua coleção' }}
-                    </p>
-                </div>
+            <div>
+                <a href="{{ route('dashboard') }}"
+                class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 px-3 py-1.5 rounded-lg transition mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0"/>
+                    </svg>
+                    Voltar ao início
+                </a>
+                <h1 class="text-2xl font-bold">Minha Coleção</h1>
+                <p class="text-gray-500 mt-1 text-sm">
+                    {{ $movies->count() }} {{ $movies->count() == 1 ? 'filme na sua coleção' : 'filmes na sua coleção' }}
+                </p>
+            </div>
 
                 <div class="relative w-full md:w-72">
                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -37,15 +44,15 @@
                         Todos
                     </button>
                     <button onclick="filterBy('rated')" data-filter="rated"
-                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-white">
+                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-[#a060ff]">
                         Avaliados
                     </button>
                     <button onclick="filterBy('unrated')" data-filter="unrated"
-                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-white">
+                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-[#a060ff]">
                         Não avaliados
                     </button>
                     <button onclick="filterBy('favorite')" data-filter="favorite"
-                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-white">
+                        class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition border border-white/10 bg-white/[0.03] text-gray-500 hover:border-[#8042e8]/30 hover:text-[#a060ff]">
                         ♥ Favoritos
                     </button>
                 </div>
