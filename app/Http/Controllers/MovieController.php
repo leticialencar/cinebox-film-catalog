@@ -161,10 +161,9 @@ class MovieController extends Controller
             return $v['type'] === 'Trailer'
                 && ($v['official'] ?? false) === true
                 && str_contains($name, $firstWord);
-        })?->offsetGet('key')
-        ?? $videos->skip(1)->firstWhere('type', 'Trailer')['key']
-        ?? $videos->firstWhere('type', 'Trailer')['key']
-        ?? null;
+        })['key'] ?? null
+        ?: ($videos->skip(1)->firstWhere('type', 'Trailer')['key'] ?? null)
+        ?: ($videos->firstWhere('type', 'Trailer')['key'] ?? null);
 
         $runtime = $movie['runtime'] ?? null;
         $hours = $runtime ? floor($runtime / 60) : null;
