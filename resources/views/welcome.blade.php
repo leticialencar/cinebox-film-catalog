@@ -236,7 +236,7 @@
             <iframe
                 x-ref="video"
                 class="w-full h-full"
-                src="https://player.vimeo.com/video/1185974496?autoplay=1&muted=1&loop=1&title=0&byline=0&portrait=0"
+                src="https://player.vimeo.com/video/1185974496?autoplay=1&muted=1&loop=1&background=1"
                 frameborder="0"
                 allow="autoplay; fullscreen; picture-in-picture"
                 allowfullscreen>
