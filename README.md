@@ -1,59 +1,136 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
 <p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+  <img src="https://i.imgur.com/XPuoV4A.png" width="30%" />
 </p>
 
-## About Laravel
+<p align="center">
+    A full-stack movie catalog platform inspired by Letterboxd. <br>
+    Explore movies, manage collections, rate films, and watch trailers powered by the TMDB API.
+</p>
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+<p align="center">
+  <a href="https://cinebox-film-catalog-production.up.railway.app/">View Live Demo →</a>
+</p>
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<br>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+![Banner Preview](https://i.imgur.com/iuPogUb.png)
 
-## Learning Laravel
+<br>
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+![Explore Preview](https://i.imgur.com/9jPXnEw.png)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+<p align="center">
+Discover • Rate • Review • Build your movie collection
+</p>
 
-## Laravel Sponsors
+<br>
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🍿 Features
 
-### Premium Partners
+- Add and remove movies from your personal collection  
+- Rate movies (1 to 5 stars) and write/edit reviews  
+- Mark movies as favorites  
+- Organize and filter your collection (favorites, rated, not rated)  
+- Search movies globally and within your collection  
+- Discover upcoming and trending movies  
+- Customize user profile (avatar and personal info)  
+- Removing a movie from your collection will also delete its rating, review, and favorite status (with confirmation prompt)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+<br>
 
-## Contributing
+## Tech Stack
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Backend
+- Laravel 12.53.0 (PHP framework)
+- MySQL (local development)
+- PostgreSQL (production environment on Railway)
 
-## Code of Conduct
+### Frontend
+- Blade Templates
+- Tailwind CSS
+- Vanilla JavaScript (no frameworks)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### APIs & Services
+- TMDB API (movie data provider)
+- Mailtrap (email testing environment)
+- Gmail SMTP (production email service)
 
-## Security Vulnerabilities
+### Media Storage
+- Cloudinary (image upload, storage and CDN)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### DevOps / Deployment
+- Railway (hosting & deployment platform)
+- GitHub Actions (CI/CD pipeline)
 
-## License
+<br>
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## How to Run Locally
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/leticialencar/cinebox-film-catalog.git
+cd cinebox-film-catalog
+```
+
+### 2. Install dependencies
+```bash
+composer install
+npm install
+```
+
+### 3. Configure environment variables
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+Update your `.env` file with your database credentials and required API keys (TMDB, Cloudinary, etc).<br>
+Mailtrap is optional and used only for local email testing.
+
+### 4. Run database migrations
+```bash
+php artisan migrate
+```
+
+### 5. Start the development server
+```bash
+php artisan serve
+npm run dev
+# or for production build:
+npm run build
+```
+The application will be available at: `http://localhost:8000`
+
+<br>
+
+## Future Improvements
+- Docker deployment for production environment
+- Google OAuth login integration
+- Add tags/genres system for movies (custom user tags)
+- Improve collection status system (`watched`, `want to watch`, `watching`)
+- Possible social features (likes, reviews sharing between users)
+
+<br>
+
+## Author
+ 
+Made with ❤️ by **Letícia Alencar** <br>
+Personal project for learning and portfolio development.
+And for those who love movies ;)
+
+<br>
+
+## Credits
+
+Data provided by The Movie Database (TMDB).
+https://www.themoviedb.org/
+
+This project is not endorsed or certified by TMDB.
+
+<br>
+
+---
+ 
+<div align="center">
+⭐ If you liked this project, consider giving it a star — it helps a lot!
+ 
+</div>
