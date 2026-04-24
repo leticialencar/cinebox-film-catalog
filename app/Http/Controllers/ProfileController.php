@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
-use Illuminate\Support\Facades\Storage;
+use Cloudinary\Cloudinary;
+use Cloudinary\Configuration\Configuration;
 
 class ProfileController extends Controller
 {
@@ -20,6 +21,15 @@ class ProfileController extends Controller
         return view('profile.edit', [
             'user' => $request->user(),
         ]);
+    }
+
+    private function getCloudinary(): Cloudinary
+    {
+        $cloudinary = new Cloudinary(
+            'cloudinary://'.env('CLOUDINARY_KEY').':'.env('CLOUDINARY_SECRET').'@'.env('CLOUDINARY_CLOUD_NAME')
+        );
+
+        return $cloudinary;
     }
 
     /**
@@ -35,10 +45,19 @@ class ProfileController extends Controller
         }
 
         if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                Storage::disk('public')->delete($user->avatar);
+            $cloudinary = $this->getCloudinary();
+
+            if ($user->cloudinary_public_id) {
+                $cloudinary->uploadApi()->destroy($user->cloudinary_public_id);
             }
-            $user->avatar = $request->file('avatar')->store('avatars', 'public');
+
+            $result = $cloudinary->uploadApi()->upload(
+                $request->file('avatar')->getRealPath(),
+                ['folder' => 'avatars']
+            );
+
+            $user->avatar = $result['secure_url'];
+            $user->cloudinary_public_id = $result['public_id'];
         }
 
         $user->save();
@@ -57,14 +76,13 @@ class ProfileController extends Controller
 
         $user = $request->user();
 
-        if ($user->avatar) {
-            Storage::disk('public')->delete($user->avatar);
+        if ($user->cloudinary_public_id) {
+            $cloudinary = $this->getCloudinary();
+            $cloudinary->uploadApi()->destroy($user->cloudinary_public_id);
         }
 
         Auth::logout();
-
         $user->delete();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

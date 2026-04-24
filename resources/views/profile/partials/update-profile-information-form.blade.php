@@ -33,7 +33,7 @@
                         @if($user->avatar)
                             <img
                                 x-show="!preview"
-                                src="{{ Storage::url($user->avatar) }}"
+                                src="{{ $user->avatar }}"
                                 class="w-full h-full object-cover"
                             >
                         @else

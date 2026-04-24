@@ -81,7 +81,7 @@
             <button @click="open = !open"
                     class="flex items-center gap-2 px-4 py-2 rounded-lg border border-white/15 text-gray-300 text-sm font-medium hover:border-[#8042e8]/50 hover:text-purple-300 transition-all duration-200">
                 @if(Auth::user()->avatar)
-                    <img src="{{ Storage::url(Auth::user()->avatar) }}"
+                    <img src="{{ Auth::user()->avatar }}"
                         class="w-6 h-6 rounded-full object-cover border border-white/10">
                 @else
                     <span class="w-6 h-6 rounded-full bg-[#8042e8]/30 flex items-center justify-center text-[10px] font-bold text-purple-300">
@@ -140,7 +140,7 @@
 
         <div class="flex items-center gap-3 pb-4 mb-2 border-b border-white/5">
             @if(Auth::user()->avatar)
-                <img src="{{ Storage::url(Auth::user()->avatar) }}"
+                <img src="{{ Auth::user()->avatar }}"
                     class="w-8 h-8 rounded-full object-cover border border-white/10">
             @else
                 <span class="w-8 h-8 rounded-full bg-[#8042e8]/30 flex items-center justify-center text-xs font-bold text-purple-300">
