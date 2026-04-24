@@ -101,6 +101,13 @@ class MovieController extends Controller
             'language' => 'pt-BR'
         ])->json('results') ?? [];
 
+        if (empty($movie['videos'])) {
+            $movie['videos'] = Http::get("https://api.themoviedb.org/3/movie/{$id}/videos", [
+                'api_key' => $apiKey,
+                'language' => 'en-US'
+            ])->json('results') ?? [];
+        }
+
         $movie['credits'] = Http::get("https://api.themoviedb.org/3/movie/{$id}/credits", [
             'api_key' => $apiKey,
             'language' => 'pt-BR'
@@ -144,7 +151,20 @@ class MovieController extends Controller
         $director = $movie['director'];
         $writer = $movie['writer'];
         $studios = $movie['studios'];
-        $trailer = collect($movie['videos'])->firstWhere('type', 'Trailer')['key'] ?? null;
+        $videos = collect($movie['videos']);
+
+        $movieTitle = strtolower($movie['title'] ?? '');
+        $firstWord = strtolower(explode(' ', trim($movieTitle))[0]);
+
+        $trailer = $videos->first(function ($v) use ($firstWord) {
+            $name = strtolower($v['name'] ?? '');
+            return $v['type'] === 'Trailer'
+                && ($v['official'] ?? false) === true
+                && str_contains($name, $firstWord);
+        })?->offsetGet('key')
+        ?? $videos->skip(1)->firstWhere('type', 'Trailer')['key']
+        ?? $videos->firstWhere('type', 'Trailer')['key']
+        ?? null;
 
         $runtime = $movie['runtime'] ?? null;
         $hours = $runtime ? floor($runtime / 60) : null;
