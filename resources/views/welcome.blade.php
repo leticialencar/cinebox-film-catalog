@@ -29,7 +29,7 @@
                 </a>
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}"
-                    class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-[#8042e8] hover:bg-[#8042e8]/90 text-white text-xs md:text-sm font-semibold transition">
+                    class="px-3 py-1.5 md:px-4 md:py-2 rounded-lg bg-[#8042e8] hover:bg-[#8042e8]/90 text-white text-xs md:text-sm font-semibold transition whitespace-nowrap">
                         Criar conta
                     </a>
                 @endif
