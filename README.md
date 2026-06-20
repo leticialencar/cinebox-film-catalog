@@ -9,6 +9,8 @@
 
 <p align="center">
   <a href="https://cinebox-film-catalog-production.up.railway.app/">View Live Demo →</a>
+  <br><br>
+  ⚠️ Demo temporarily offline — deployment migration in progress.
 </p>
 
 <br>
